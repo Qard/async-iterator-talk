@@ -1,0 +1,182 @@
+import { Head } from 'mdx-deck'
+import CodeSurfer from './code-surfer'
+export { dark as theme } from 'mdx-deck/themes'
+
+<Head>
+  <title>Async Iterators - a new future for streams</title>
+</Head>
+
+# Async Iterators
+## a new future for streams
+---
+<CodeSurfer
+  title="About Me"
+  code={require('!raw-loader!./assets/about.js')}
+  steps={[
+    { notes: "" },
+    { lines: [2], notes: "Hi, I'm Stephen" },
+    { lines: [3], notes: "I'm on Github" },
+    { lines: [4], notes: "And Twitter" },
+    { lines: [5], notes: "I work at Elastic" }
+  ]}
+/>
+
+```notes
+- Node.js core contributor
+- Started diagnostics WG
+- Elastic is always hiring!
+```
+---
+<CodeSurfer
+  title="The basics"
+  code={require('!raw-loader!./assets/interval.js')}
+  steps={[
+    { range: [7, 12], notes: "This is an async generator function" },
+    { tokens: { 7: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }, notes: "It has a special signature" },
+    { lines: [9], notes: "It can await async things" },
+    { lines: [10], notes: "And it can yield values" },
+    { tokens: { 14: [10, 11, 12, 13] }, notes: "It returns an async iterator" },
+    { range: [14, 16], notes: "Which can be used in a for await loop" },
+    { notes: "" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="Custom async iterators"
+  code={require('!raw-loader!./assets/custom-async-iterator.js')}
+  steps={[
+    { notes: "Async iterators and generators are just an interface" },
+    { lines: [2, 3, 9, 10], notes: "An iterator has a promise-returning next function" },
+    { range: [5, 8], notes: "It should resolve to an iterator item object" },
+    { range: [12, 16], notes: "A generator has one function returning an iterator" },
+    { tokens: { 13: [0,1,2,3,4,5,6,7,8] }, notes: "It requires a special symbol property name" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="Node.js streams"
+  code={require('!raw-loader!./assets/streams.js')}
+  steps={[
+    { notes: "Streams are async iterators too" },
+    { lines: [10], notes: "If you have a stream..." },
+    { range: [3, 5], notes: "...you can consume it with a loop" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="Stream transforms"
+  code={require('!raw-loader!./assets/stream-transforms.js')}
+  steps={[
+    { notes: "" },
+    { lines: [1, 10, 16], notes: "The async-iterator-pipe module is super helpful" },
+    { lines: [11], notes: "It takes a source stream..." },
+    { lines: [12, 13, 14], notes: "...any number of transforms..." },
+    { lines: [15], notes: "...and a target" },
+    { lines: [11], notes: "The source must be an async iterable" },
+    { range: [12, 15], notes: "The rest, streams or async generator functions" },
+    { range: [4, 8], notes: "Functions transform an async iterable to a result" }
+  ]}
+/>
+---
+<CodeSurfer
+  title="Now something more complex"
+  code={require('!raw-loader!./assets/stream-line-split.js')}
+  steps={[
+    { range: [39, 45], notes: "Let's try converting a csv to new-line delimited JSON" },
+    { lines: [40], notes: "First, get a read stream of the CSV file" },
+    { range: [3, 14], notes: "Let's split the stream by line breaks" },
+    { lines: [4, 5, 6, 13], notes: "Append the stringified chunks to a buffer" },
+    { range: [7, 12], notes: "While the buffer contains a line break, slice and yield" },
+    { range: [16, 30], notes: "Now that we've split to lines, parse csv lines" },
+    { range: [17, 21], tokens: { 22: [1], 29: [1] }, notes: "The first line contains the column names" },
+    { range: [23, 27], lines: [18, 19, 29], notes: "Subsequent lines contain data" },
+    { range: [32, 36], notes: "Now stringify the JSON..." },
+    { lines: [44], notes: "...and pass it to the target stream" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="async-iterator-pipe"
+  code={require('!raw-loader!./assets/async-iterator-pipe.js')}
+  steps={[
+    { notes: "What is this pipe magic?" },
+    { range: [1, 6], notes: "Here we pipe an iterable into a stream..." },
+    { range: [2, 4], notes: "...by writing each item to the stream..." },
+    { lines: [5], notes: "...then ending the stream" },
+    {
+      tokens: {
+        12: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        13: [1, 2, 3, 4, 5, 6],
+        14: [1]
+      },
+      notes: "Iterator function targets are called with the source directly"
+    },
+    { range: [8, 17], notes: "Detect target type and switch the logic" },
+    { range: [19, 21], notes: "Then reduce the transform chain" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="HTTP servers"
+  code={require('!raw-loader!./assets/http-server.js')}
+  steps={[
+    { notes: "HTTP requests can be async iterators too" },
+    { lines: [2], notes: "There's a module for that" },
+    { range: [4, 5], notes: "Create an HTTP server..." },
+    { range: [7, 10], notes: "...and convert 'request' events into iterable values" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="How does http-iterator work?"
+  code={require('!raw-loader!./assets/http-iterator.js')}
+  steps={[
+    { notes: "http-iterator is fairly simple too" },
+    { lines: [1], notes: "channel-surfer provides go-like channels" },
+    { lines: [4], notes: "Construct a channel" },
+    { lines: [6, 7, 8], notes: "Give it requests" },
+    { lines: [10, 11, 12], notes: "Close it when the server closes" },
+    { lines: [14], notes: "Return and consume as an async iterator" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="Pagination"
+  code={require('!raw-loader!./assets/pagination.js')}
+  steps={[
+    { range: [1, 14], notes: "Say you have paginated data like this..." },
+    { range: [16, 19], notes: "...and an API to retrieve from it like this" },
+    { range: [21, 28], notes: "A naive page iterator might look like this" },
+    { range: [25, 27], notes: "It yields pages until loadPage returns null" },
+    { range: [30, 36], notes: "This flattens pages to an item iterator" },
+    { range: [38, 43], notes: "Let's use it now..." },
+    { lines: [38], notes: "Make a page iterator..." },
+    { lines: [39], notes: "...wrap it in a page-to-items transformer..." },
+    { range: [41, 43], notes: "...then consume the result" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="Batching"
+  code={require('!raw-loader!./assets/batching.js')}
+  steps={[
+    { range: [5, 11], notes: "Consider an infinite sequence of async things..." },
+    { range: [13, 18], notes: "To create a batch, we need a function to get a slice" },
+    { range: [14, 17], notes: "For of loops consume the iterator, so use while instead" },
+    { range: [20, 26], notes: "We'll also need to convert the async iterator to an array" },
+    { range: [28, 35], notes: "Now we can split to batches as an async iterator" },
+    { lines: [30], notes: "Get an iterator page of the given size" },
+    { lines: [31], notes: "Convert the iterator to an array" },
+    { range: [32, 33], notes: "As long as there are items, yield the slice" },
+    { range: [37, 44], notes: "...and process the batches however we want!" },
+  ]}
+/>
+---
+# Go forth
+## and async iterate!
+
+<p>
+  Slides are at <a href={document.location.origin}>
+    {document.location.origin}
+  </a>
+</p>

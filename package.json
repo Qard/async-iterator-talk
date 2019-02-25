@@ -1,0 +1,22 @@
+{
+  "name": "async-iterator-talk",
+  "version": "1.0.0",
+  "description": "VanJS talk about async iterators and streams",
+  "scripts": {
+    "start": "mdx-deck slides.mdx",
+    "build": "npm run build:presentation && npm run build:assets",
+    "build:presentation": "mdx-deck build slides.mdx --no-html",
+    "build:assets": "cp -r assets dist/",
+    "now-build": "npm run build",
+    "deploy": "now"
+  },
+  "author": "Stephen Belanger <admin@stephenbelanger.com> (https://github.com/qard)",
+  "license": "MIT",
+  "devDependencies": {
+    "mdx-deck": "^1.8.2",
+    "mdx-deck-code-surfer": "^0.5.5",
+    "now": "^13.1.3",
+    "prism-react-renderer": "^0.1.5",
+    "raw-loader": "^1.0.0"
+  }
+}

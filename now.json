@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "async-iterators-a-new-future-for-streams",
+  "alias": "async-iterators-talk.now.sh",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build"
+    }
+  ]
+}
