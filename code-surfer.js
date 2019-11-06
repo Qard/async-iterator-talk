@@ -1,6 +1,6 @@
 import React from 'react'
 import { CodeSurfer } from "mdx-deck-code-surfer"
-import vsDarkPlus from "prism-react-renderer/themes/vsDarkPlus"
+// import vsDarkPlus from "prism-react-renderer/themes/vsDarkPlus"
 
 const CustomCodeSurfer = ({ title, code, steps }) => (
   <CodeSurfer
@@ -8,7 +8,7 @@ const CustomCodeSurfer = ({ title, code, steps }) => (
     code={code}
     lang="javascript"
     showNumbers={false}
-    theme={vsDarkPlus}
+    // theme={vsDarkPlus}
     steps={steps}
   />
 )

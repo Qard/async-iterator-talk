@@ -11,13 +11,12 @@ export { dark as theme } from 'mdx-deck/themes'
 ---
 <CodeSurfer
   title="About Me"
-  code={require('!raw-loader!./assets/about.js')}
+  code={require('!raw-loader!./intro/about.js').default}
   steps={[
     { notes: "" },
     { lines: [2], notes: "Hi, I'm Stephen" },
     { lines: [3], notes: "I'm on Github" },
-    { lines: [4], notes: "And Twitter" },
-    { lines: [5], notes: "I work at Elastic" }
+    { lines: [4], notes: "And Twitter" }
   ]}
 />
 
@@ -27,9 +26,25 @@ export { dark as theme } from 'mdx-deck/themes'
 - Elastic is always hiring!
 ```
 ---
+import { Appear } from 'mdx-deck'
+
+# Agenda
+
+<ul>
+  <Appear>
+    <li>Intro to async iterators</li>
+    <li>Use cases</li>
+    <li>Pitfalls</li>
+    <li>Performance</li>
+  </Appear>
+</ul>
+
+---
+# What are async iterators?
+---
 <CodeSurfer
   title="The basics"
-  code={require('!raw-loader!./assets/interval.js')}
+  code={require('!raw-loader!./intro/interval.js').default}
   steps={[
     { range: [7, 12], notes: "This is an async generator function" },
     { tokens: { 7: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }, notes: "It has a special signature" },
@@ -43,7 +58,7 @@ export { dark as theme } from 'mdx-deck/themes'
 ---
 <CodeSurfer
   title="Custom async iterators"
-  code={require('!raw-loader!./assets/custom-async-iterator.js')}
+  code={require('!raw-loader!./intro/custom-async-iterator.js').default}
   steps={[
     { notes: "Async iterators and generators are just an interface" },
     { lines: [2, 3, 9, 10], notes: "An iterator has a promise-returning next function" },
@@ -53,19 +68,22 @@ export { dark as theme } from 'mdx-deck/themes'
   ]}
 />
 ---
+# Let's see some examples
+---
 <CodeSurfer
   title="Node.js streams"
-  code={require('!raw-loader!./assets/streams.js')}
+  code={require('!raw-loader!./examples/streams.js').default}
   steps={[
-    { notes: "Streams are async iterators too" },
+    { notes: "Did you know streams are async iterators?" },
     { lines: [10], notes: "If you have a stream..." },
     { range: [3, 5], notes: "...you can consume it with a loop" },
+    { range: [1, 7], notes: "Concatenating a stream has never been easier!" },
   ]}
 />
 ---
 <CodeSurfer
   title="Stream transforms"
-  code={require('!raw-loader!./assets/stream-transforms.js')}
+  code={require('!raw-loader!./examples/stream-transforms.js').default}
   steps={[
     { notes: "" },
     { lines: [1, 10, 16], notes: "The async-iterator-pipe module is super helpful" },
@@ -80,45 +98,38 @@ export { dark as theme } from 'mdx-deck/themes'
 ---
 <CodeSurfer
   title="Now something more complex"
-  code={require('!raw-loader!./assets/stream-line-split.js')}
+  code={require('!raw-loader!./examples/stream-line-split.js').default}
   steps={[
-    { range: [39, 45], notes: "Let's try converting a csv to new-line delimited JSON" },
-    { lines: [40], notes: "First, get a read stream of the CSV file" },
-    { range: [3, 14], notes: "Let's split the stream by line breaks" },
-    { lines: [4, 5, 6, 13], notes: "Append the stringified chunks to a buffer" },
-    { range: [7, 12], notes: "While the buffer contains a line break, slice and yield" },
-    { range: [16, 30], notes: "Now that we've split to lines, parse csv lines" },
-    { range: [17, 21], tokens: { 22: [1], 29: [1] }, notes: "The first line contains the column names" },
-    { range: [23, 27], lines: [18, 19, 29], notes: "Subsequent lines contain data" },
-    { range: [32, 36], notes: "Now stringify the JSON..." },
-    { lines: [44], notes: "...and pass it to the target stream" },
+    { range: [42, 48], notes: "Let's try converting a csv to new-line delimited JSON" },
+    { lines: [43], notes: "First, get a read stream of the CSV file" },
+    { range: [3, 17], notes: "Let's split the stream by line breaks" },
+    { lines: [4, 6, 7, 16], notes: "Append chunks to a buffer" },
+    { range: [9, 15], notes: "While the buffer contains a line break, slice and yield" },
+    { range: [19, 37], notes: "Now that we've split to lines, parse csv lines" },
+    { range: [20, 28], tokens: { 36: [1] }, notes: "The first line contains the column names" },
+    { range: [30, 36], lines: [22, 23], notes: "Subsequent lines contain data" },
+    { range: [39, 43], notes: "Now stringify the JSON..." },
+    { lines: [51], notes: "...and pass it to the target stream" },
   ]}
 />
 ---
 <CodeSurfer
   title="async-iterator-pipe"
-  code={require('!raw-loader!./assets/async-iterator-pipe.js')}
+  code={require('!raw-loader!./examples/async-iterator-pipe.js').default}
   steps={[
     { notes: "What is this pipe magic?" },
     { range: [1, 6], notes: "Here we pipe an iterable into a stream..." },
     { range: [2, 4], notes: "...by writing each item to the stream..." },
     { lines: [5], notes: "...then ending the stream" },
-    {
-      tokens: {
-        12: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-        13: [1, 2, 3, 4, 5, 6],
-        14: [1]
-      },
-      notes: "Iterator function targets are called with the source directly"
-    },
-    { range: [8, 17], notes: "Detect target type and switch the logic" },
-    { range: [19, 21], notes: "Then reduce the transform chain" },
+    { range: [14, 16], notes: "Iterator function targets are called directly" },
+    { range: [9, 18], notes: "Some type detection allows supporting both types" },
+    { range: [21, 23], notes: "The pipes can be connected with a reduce" },
   ]}
 />
 ---
 <CodeSurfer
   title="HTTP servers"
-  code={require('!raw-loader!./assets/http-server.js')}
+  code={require('!raw-loader!./examples/http-server.js').default}
   steps={[
     { notes: "HTTP requests can be async iterators too" },
     { lines: [2], notes: "There's a module for that" },
@@ -129,25 +140,25 @@ export { dark as theme } from 'mdx-deck/themes'
 ---
 <CodeSurfer
   title="How does http-iterator work?"
-  code={require('!raw-loader!./assets/http-iterator.js')}
+  code={require('!raw-loader!./examples/http-iterator.js').default}
   steps={[
     { notes: "http-iterator is fairly simple too" },
     { lines: [1], notes: "channel-surfer provides go-like channels" },
     { lines: [4], notes: "Construct a channel" },
     { lines: [6, 7, 8], notes: "Give it requests" },
     { lines: [10, 11, 12], notes: "Close it when the server closes" },
-    { lines: [14], notes: "Return and consume as an async iterator" },
+    { lines: [14], notes: "Channels are already async iterators, just return" },
   ]}
 />
 ---
 <CodeSurfer
   title="Pagination"
-  code={require('!raw-loader!./assets/pagination.js')}
+  code={require('!raw-loader!./examples/pagination.js').default}
   steps={[
-    { range: [1, 14], notes: "Say you have paginated data like this..." },
-    { range: [16, 19], notes: "...and an API to retrieve from it like this" },
+    { range: [1, 14], notes: "Say you have some paginated data..." },
+    { range: [16, 19], notes: "...and an async function to retrieve pages" },
     { range: [21, 28], notes: "A naive page iterator might look like this" },
-    { range: [25, 27], notes: "It yields pages until loadPage returns null" },
+    { range: [25, 27], notes: "It yields pages until loadPage returns falsy" },
     { range: [30, 36], notes: "This flattens pages to an item iterator" },
     { range: [38, 43], notes: "Let's use it now..." },
     { lines: [38], notes: "Make a page iterator..." },
@@ -158,7 +169,7 @@ export { dark as theme } from 'mdx-deck/themes'
 ---
 <CodeSurfer
   title="Batching"
-  code={require('!raw-loader!./assets/batching.js')}
+  code={require('!raw-loader!./examples/batching.js').default}
   steps={[
     { range: [5, 11], notes: "Consider an infinite sequence of async things..." },
     { range: [13, 18], notes: "To create a batch, we need a function to get a slice" },
@@ -169,6 +180,77 @@ export { dark as theme } from 'mdx-deck/themes'
     { lines: [31], notes: "Convert the iterator to an array" },
     { range: [32, 33], notes: "As long as there are items, yield the slice" },
     { range: [37, 44], notes: "...and process the batches however we want!" },
+  ]}
+/>
+---
+# There _are_ some pitfalls
+---
+<CodeSurfer
+  title="For-await fully consumes"
+  code={require('!raw-loader!./examples/batching.js').default}
+  steps={[
+    { range: [14, 17], notes: "Use while and iterator interface for partial consumption" }
+  ]}
+/>
+---
+<CodeSurfer
+  title="Microtasks are higher priority"
+  code={require('!raw-loader!./examples/microtask-priority.js').default}
+  steps={[
+    { range: [7, 9], lines: [2], notes: "Consider an infinite loop..." },
+    { range: [2, 5], notes: "...with a timeout escape" },
+    { range: [1, 10], notes: "This might seem reasonable at first, but it's not." },
+    { range: [12, 13], notes: "Let's produce numbers until the timeout is reached." },
+    { range: [15, 19], notes: "Then sum all the numbers produced until the timeout." },
+    { range: [15, 19], notes: "Did you catch the issue?" },
+    {
+      tokens: { 13: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
+      notes: "The immediately available result will create a microtask loop"
+    }
+  ]}
+/>
+---
+# What about performance?
+## I've heard promises are slow
+---
+<CodeSurfer
+  title="First, let's look at streams"
+  code={require('!raw-loader!./performance/upper/stream.js').default}
+  steps={[
+    { range: [3, 8], notes: "We'll just do a basic uppercasing stream" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="Next, the async iterator"
+  code={require('!raw-loader!./performance/upper/async-iterator.js').default}
+  steps={[
+    { range: [3, 7], notes: "The async iterator is nearly identical" }
+  ]}
+/>
+---
+# Let's try something less naive
+## Converting CSV to JSON
+---
+<CodeSurfer
+  title="First, let's look at streams"
+  code={require('!raw-loader!./performance/csv-to-json/stream.js').default}
+  steps={[
+    { range: [4, 31], notes: "We need a CSV transform" },
+    { range: [7, 8], notes: "First, get all the unprocessed data" },
+    { lines: [10, 11, 21, 22, 23], notes: "Then loop while the buffer contains a line break" },
+    { range: [12, 19], notes: "Split each line and store headers or push an object" },
+  ]}
+/>
+---
+<CodeSurfer
+  title="Next, the async iterator"
+  code={require('!raw-loader!./performance/csv-to-json/async-iterator.js').default}
+  steps={[
+    { range: [4, 26], notes: "We need a CSV transform" },
+    { lines: [5, 9], notes: "We need to handle unprocessed data for each chunk" },
+    { lines: [11, 12, 22, 23, 24], notes: "The line loop should look familiar..." },
+    { range: [13, 20], notes: "..and even the splitting and yielding is similar" },
   ]}
 />
 ---
