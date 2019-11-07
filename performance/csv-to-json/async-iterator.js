@@ -17,6 +17,7 @@ async function* csv (iterator) {
         keys = values
       } else {
         yield zipKeyValueLists(keys, values)
+        await new Promise(setImmediate)
       }
 
       buffer = buffer.slice(position + 1)
