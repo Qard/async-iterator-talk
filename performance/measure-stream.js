@@ -7,14 +7,15 @@ const colors = ['red', 'yellow']
 let n = 0
 
 class MeasureStream extends Writable {
-  constructor(mode) {
+  constructor(mode, compute) {
     super()
     this.timer = microtime()
+    this.compute = compute
 
     this.data = {
       title: mode,
-      x: new CappedArray(50),
-      y: new CappedArray(50),
+      y: new CappedArray(60),
+      x: new CappedArray(60),
       style: {
         line: colors[n++]
       }
@@ -28,9 +29,9 @@ class MeasureStream extends Writable {
 
     if (!x.length || x[x.length - 1] !== bucket) {
       x.push(bucket)
-      y.push(chunk.length)
+      y.push(this.compute(0, chunk, now))
     } else {
-      y[y.length - 1] = chunk.length + y[y.length - 1]
+      y[y.length - 1] = this.compute(y[y.length - 1], chunk, now)
     }
 
     setImmediate(callback)
