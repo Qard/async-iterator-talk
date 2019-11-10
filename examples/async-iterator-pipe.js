@@ -18,8 +18,8 @@ function pipeDirect (source, target) {
   throw new Error('Unrecognized target type')
 }
 
-function pipe (source, ...transforms) {
-  return transforms.reduce(pipeDirect, source)
+function pipe (source, ...targets) {
+  return targets.reduce(pipeDirect, source)
 }
 
 module.exports = pipe

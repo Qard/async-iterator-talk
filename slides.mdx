@@ -100,16 +100,17 @@ import { Appear } from 'mdx-deck'
   title="Now something more complex"
   code={require('!raw-loader!./examples/stream-line-split.js').default}
   steps={[
-    { range: [42, 48], notes: "Let's try converting a csv to new-line delimited JSON" },
-    { lines: [43], notes: "First, get a read stream of the CSV file" },
-    { range: [3, 17], notes: "Let's split the stream by line breaks" },
+    { range: [50, 56], notes: "Let's try converting a csv to new-line delimited JSON" },
+    { lines: [51], notes: "First, get a read stream of the CSV file" },
+    { range: [3, 21], notes: "Then we split the stream by line breaks" },
     { lines: [4, 6, 7, 16], notes: "Append chunks to a buffer" },
     { range: [9, 15], notes: "While the buffer contains a line break, slice and yield" },
-    { range: [19, 37], notes: "Now that we've split to lines, parse csv lines" },
-    { range: [20, 28], tokens: { 36: [1] }, notes: "The first line contains the column names" },
-    { range: [30, 36], lines: [22, 23], notes: "Subsequent lines contain data" },
-    { range: [39, 43], notes: "Now stringify the JSON..." },
-    { lines: [51], notes: "...and pass it to the target stream" },
+    { range: [18, 20], notes: "Remember to emit any remaining data" },
+    { range: [23, 41], notes: "Now that we've split to lines, parse csv lines" },
+    { range: [24, 32], lines: [40], notes: "The first line contains the column names" },
+    { range: [34, 40], lines: [26, 27], notes: "Subsequent lines contain data" },
+    { range: [43, 47], notes: "Lastly, stringify the JSON..." },
+    { lines: [55], notes: "...and pass it to the target stream" },
   ]}
 />
 ---
@@ -121,9 +122,9 @@ import { Appear } from 'mdx-deck'
     { range: [1, 6], notes: "Here we pipe an iterable into a stream..." },
     { range: [2, 4], notes: "...by writing each item to the stream..." },
     { lines: [5], notes: "...then ending the stream" },
-    { range: [14, 16], notes: "Iterator function targets are called directly" },
+    { range: [14, 16], notes: "Iterator function targets can be called directly" },
     { range: [9, 18], notes: "Some type detection allows supporting both types" },
-    { range: [21, 23], notes: "The pipes can be connected with a reduce" },
+    { range: [21, 23], notes: "Multiple stages can be connected with a reduce" },
   ]}
 />
 ---
@@ -159,6 +160,7 @@ import { Appear } from 'mdx-deck'
     { range: [16, 19], notes: "...and an async function to retrieve pages" },
     { range: [21, 28], notes: "A naive page iterator might look like this" },
     { range: [25, 27], notes: "It yields pages until loadPage returns falsy" },
+    { range: [2, 6], tokens: { 7: [1] }, notes: "Remember, a page is an object with an items list" },
     { range: [30, 36], notes: "This flattens pages to an item iterator" },
     { range: [38, 43], notes: "Let's use it now..." },
     { lines: [38], notes: "Make a page iterator..." },
@@ -180,6 +182,9 @@ import { Appear } from 'mdx-deck'
     { lines: [31], notes: "Convert the iterator to an array" },
     { range: [32, 33], notes: "As long as there are items, yield the slice" },
     { range: [37, 44], notes: "...and process the batches however we want!" },
+    { lines: [41], notes: "Here we get numbers in batches of eight." },
+    { tokens: { 42: [10, 11, 12, 13, 14, 15, 16] }, notes: "Then we take eight pages of batches." },
+    { lines: [43], notes: "Then we sum each batch" },
   ]}
 />
 ---
@@ -225,7 +230,7 @@ import { Appear } from 'mdx-deck'
   title="Next, the async iterator"
   code={require('!raw-loader!./performance/upper/async-iterator.js').default}
   steps={[
-    { range: [3, 7], notes: "The async iterator is nearly identical" }
+    { range: [3, 8], notes: "The async iterator is nearly identical" }
   ]}
 />
 ---
@@ -249,8 +254,8 @@ import { Appear } from 'mdx-deck'
   steps={[
     { range: [4, 26], notes: "We need a CSV transform" },
     { lines: [5, 9], notes: "We need to handle unprocessed data for each chunk" },
-    { lines: [11, 12, 22, 23, 24], notes: "The line loop should look familiar..." },
-    { range: [13, 20], notes: "..and even the splitting and yielding is similar" },
+    { lines: [11, 12, 23, 24, 25], notes: "The line loop should look familiar..." },
+    { range: [13, 21], notes: "..and even the splitting and yielding is similar" },
   ]}
 />
 ---

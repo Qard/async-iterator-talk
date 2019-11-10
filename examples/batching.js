@@ -11,7 +11,7 @@ async function* numbers () {
 }
 
 async function* take (iterator, n) {
-  while (n-- !== 0) {
+  while (n-- > 0) {
     const item = await iterator.next()
     if (!item.done) yield item.value
   }

@@ -14,6 +14,10 @@ async function* lineSplit (iterator) {
       position = buffer.indexOf(0x0a)
     }
   }
+
+  if (buffer) {
+    yield buffer
+  }
 }
 
 async function* csv (iterator) {
